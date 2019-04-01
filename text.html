@@ -1,30 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="logic.js"></script>
-    <title>Giphy Search</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <title>Animal Gifs</title>
 </head>
+
 <body>
-<script>
-    
-    var gifOptions = ["soccer", "basketball", "baseball", "football", "hocky", "vollyball", "tennis", "running"];
-    var newHTML = [];
-for (var i = 0; i < gifOptions.length; i++) {
-    newHTML.push('<span>' + gifOptions[i] + '</span>');
-}
-$(".element").html(newHTML.join(""));
-   
-    
-    
-    
-    
-    
+    <button data-animals="lion">Lion</button>
+    <button data-animals="cat">cat</button>
+    <button data-animals="bird">Bird</button>
+    <button data-animals="hawk">Hawk</button>
+    <button data-animals="chicken">Chicken</button>
+    <button data-animals="Rouster">Rouster</button>
+    <button data-animals="horse">Horse</button>
+    <button data-animals="bull">Bull</button>
+    <button data-animals="girraff">Girraff</button>
+    <button data-animals="bear">Bear</button>
+    <button data-animals="human">Human</button>
+    <button data-animals="gorilla">Gorrila</button>
+    <button data-animals="monkey">Monkey</button>
+    <button data-animals="shark">Shark</button>
+    <button data-animals="fish">Fish</button>
+
+    <div id="gifs-appear-here">
+    </div>
+
+    <script type="text/javascript">
+        // adding click event to buttons
+        $("button").on("click", function () {
+            // Grabbing and storing the data-animal property value from the button
+            var animals = $(this).attr("data-animals");
+
+            // telling the queryURL we want animals data
+            var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+                animals + "&api_key=dc6zaTOxFJmzC&limit=10";
+
+            // AJAX request with the queryURL
+            $.ajax({
+                    url: queryURL,
+                    method: "GET"
+                })
+                // After data comes back from the request
+                .then(function (response) {
+
+                    // storing the data from the AJAX request in the results variable
+                    var results = response.data;
+
+                    // Looping through each result
+                    for (var i = 0; i < results.length; i++) {
+
+                        // Creating and storing a div tag
+                        var animalDiv = $("<div>");
+
+                        // Creating a paragraph tag with the result item's rating
+                        var p = $("<p>").text("Rating: " + results[i].rating);
+
+                        // Creating and storing an image tag
+                        var animalImage = $("<img>");
+                        // Setting the src attribute of the image to a property pulled off the result item
+                        animalImage.attr("src", results[i].images.fixed_height.url);
+
+                        // Appending the paragraph and image tag to the animalDiv
+                        animalDiv.append(p);
+                        animalDiv.append(animalImage);
+
+                        // Prependng the animalDiv to the HTML page in the "#gifs-appear-here" div
+                        $("#gifs-appear-here").prepend(animalDiv);
+                    }
+                });
+        });
     </script>
-    
-    
 </body>
+
 </html>
